@@ -375,7 +375,7 @@ this.parseAddresses = function(addresses){
                 email = address.indexOf("@")>=0 && address.trim();
             }
             // just in case something got mixed up
-            if(!email && name.indexOf("@")>=0){
+            if(!email && name && name.indexOf("@")>=0){
                 email = name;
                 name = false;
             }
