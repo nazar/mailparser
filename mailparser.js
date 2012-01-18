@@ -3,6 +3,8 @@ var EventEmitter = require('events').EventEmitter,
     mime = require("./mime"),
     datetime = require("./datetime");
 
+require('sugar');
+
 var PARSE_HEADERS = 1,
     PARSE_BODY = 2;
 
@@ -130,7 +132,8 @@ MailParser.prototype.analyzeHeaders = function(headerObj, headers){
     if(headerObj["date"]){
         parts = mime.parseHeaderLine(headerObj["date"] && headerObj["date"][0]);
     }
-    headers.messageDate = parts.defaultValue && datetime.strtotime(parts.defaultValue)*1000 || Date.now();
+
+    headers.messageDate = parts.defaultValue && datetime.strtotime(parts.defaultValue)*1000;
 
     headers.receivedDate = Date.now();
 
