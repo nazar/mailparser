@@ -487,15 +487,19 @@ function toCharset(charset, buffer){
  * NB! For UTF-8 use decodeURIComponent and for Latin 1 decodeURL instead
  **/
 function decodeBytestreamUrlencoding(encoded_string){
-    var c, i, j=0, prcnts = encoded_string.match(/%/g) || "",
-            buffer_length = encoded_string.length - (prcnts.length*2),
+    var c, decodedC, i, j=0,
+        prcnts = encoded_string.match(/%[0-9a-f]{2}/ig) || "",
+        buffer_length = encoded_string.length - (prcnts.length*2),
         buffer = new Buffer(buffer_length);
 
-    for(var i=0; i<encoded_string.length; i++){
+    for(i=0; i<encoded_string.length; i++){
         c = encoded_string.charCodeAt(i);
         if(c=="37"){ // %
-            c = parseInt(encoded_string.substr(i+1,2), 16);
-            i+=2;
+            decodedC = parseInt(encoded_string.substr(i+1,2), 16);
+            if (!isNaN(decodedC)) {
+                c = decodedC;
+                i+=2;
+            }
         }
         buffer[j++] = c;
     }
