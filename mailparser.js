@@ -76,7 +76,7 @@ MailParser.prototype.parseHeaders = function(data){
 }
 
 MailParser.prototype.analyzeHeaders = function(headerObj, headers){
-    var parts, headersUsed = [];
+    var parts, headersUsed = [], subjectHeader;
 
     // mime version
     headersUsed.push("mime-version");
@@ -183,10 +183,11 @@ MailParser.prototype.analyzeHeaders = function(headerObj, headers){
 
     // subject
     headersUsed.push("subject");
-    if(headers.useMime){
-        headers.subject = mime.parseMimeWords(headerObj["subject"] && headerObj["subject"][0] || "");
+    subjectHeader = headerObj["subject"] && headerObj["subject"][0] || "";
+    if(headers.useMime || !!subjectHeader.match(/^=\?UTF-8\?(?:B|Q)\?/i)){
+        headers.subject = mime.parseMimeWords(subjectHeader);
     }else
-        headers.subject = headerObj["subject"] && headerObj["subject"][0] || "";
+        headers.subject = subjectHeader;
 
     // priority
     headersUsed.push("x-priority");
