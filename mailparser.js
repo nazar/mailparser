@@ -439,7 +439,11 @@ MailParser.prototype.parseBodyEnd = function(){
                 this.bodyData.bodyText = mime.decodeBase64(this.bodyData.bodyText, false, this.headers.charset);
                 break;
         }
+      if (Array.isArray(this.bodyData.bodyText)) {
+        this.bodyData.bodyText = this.bodyData.bodyText.toString().trim();
+      } else {
         this.bodyData.bodyText = this.bodyData.bodyText.trim();
+      }
         if(this.headers.contentType=="text/html"){
             this.bodyData.bodyHTML = this.bodyData.bodyText;
             this.bodyData.bodyText = false;
